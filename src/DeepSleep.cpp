@@ -15,6 +15,7 @@ void print_wakeup_reason()
   {
   case ESP_SLEEP_WAKEUP_EXT0:
     Serial.println("Wakeup caused by external signal using RTC_IO");
+    state = 2;
     break;
 
   case ESP_SLEEP_WAKEUP_EXT1:
@@ -36,6 +37,7 @@ void print_wakeup_reason()
 
   default:
     Serial.printf("Wakeup was not caused by deep sleep: %d\n", wakeup_reason);
+    state = 0;
     break;
   }
 }
@@ -50,6 +52,22 @@ void InitDeepSleepTime(int sleepTime = TIME_TO_SLEEP)
   esp_sleep_enable_timer_wakeup(sleepTime * uS_TO_S_FACTOR);
   Serial.println("Setup ESP32 to sleep for every " + String(sleepTime) + " Seconds");
 
+  Serial.println("Going to sleep now");
+  Serial.flush();
+  esp_deep_sleep_start();
+}
+
+void DeepSleepButtonWakeUp(){
+  ++bootCount;
+  Serial.println("Boot number: " + String(bootCount));
+
+  print_wakeup_reason();
+}
+
+void InitDeepSleep()
+{
+  state = 2;
+  Serial.println("Sleep Button pressed");
   Serial.println("Going to sleep now");
   Serial.flush();
   esp_deep_sleep_start();

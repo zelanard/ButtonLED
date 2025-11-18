@@ -7,6 +7,12 @@ bool blinkState = false;
 
 // parameters: (pin, activeLow, pullupActive)
 OneButton button(BUTTON, false, true);
+OneButton on_button(ON_BUTTON, false, true);
+
+void onOnButtonClick()
+{
+    InitDeepSleep();
+}
 
 void onButtonClick()
 {
@@ -18,37 +24,37 @@ void SwitchState()
 {
     switch (state)
     {
-    case 1: //Sleep
+    case 1: // Wake Up On Time
         Serial.println("State 1: RED ON, BLUE OFF");
         digitalWrite(LED_BUILTIN, LOW);
         RED();
         break;
 
-    case 2: //Blue
+    case 2: // Wake Up On Button
         Serial.println("State 2: RED OFF, BLUE ON");
         BLUE();
         digitalWrite(LED_BUILTIN, LOW);
         break;
 
-    case 3: //Blinking
+    case 3: // Blinking
         Serial.println("State 3: BLINKING");
         // see LifeTime()
         digitalWrite(LED_BUILTIN, LOW);
         break;
 
-    case 4: //Both On
+    case 4: // Both On
         Serial.println("State 4: BOTH ON");
         BOTH(true);
         digitalWrite(LED_BUILTIN, LOW);
         break;
 
-    case 5: //Go To Sleep Timed
+    case 5: // Go To Sleep Timed
         Serial.println("State 5: BOTH OFF");
         digitalWrite(LED_BUILTIN, LOW);
         InitDeepSleepTime(5); // Sleep for 5 seconds
         break;
 
-    default: //Default
+    default: // Default
         Serial.println("State 0: Default");
         BOTH(false);
         digitalWrite(LED_BUILTIN, HIGH);
@@ -84,13 +90,21 @@ void BOTH(bool on)
 
 void StateCount()
 {
-    if (state < 5)
+    switch (state)
     {
-        state++;
-    }
-    else
-    {
+    case 0:
+        state = 3;
+        break;
+    case 3:
+        state = 4;
+        break;
+    case 4:
+        state = 5;
+        break;
+    
+    default:
         state = 0;
+        break;
     }
 }
 
