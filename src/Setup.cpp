@@ -15,6 +15,8 @@ void Init()
     esp_sleep_enable_ext0_wakeup(WAKEUP_GPIO, 1);
     rtc_gpio_pullup_dis(WAKEUP_GPIO);
     rtc_gpio_pulldown_en(WAKEUP_GPIO);
+    esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
+    Serial.println("Setup ESP32 to sleep for " + String(TIME_TO_SLEEP) + " Seconds");
 
     button.attachClick(onButtonClick);
     on_button.attachClick(onOnButtonClick);
@@ -22,7 +24,8 @@ void Init()
     Serial.begin(115200);
     delay(1000); // Wait for Serial to initialize
     Serial.println("Initialization complete.");
-    if(state == 2){
+    Serial.println("State: " + String(state));
+    if(state == 1){
         DeepSleepButtonWakeUp();
     }
     SwitchState();

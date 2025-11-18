@@ -1,7 +1,7 @@
 #include "State.h"
 #include "DeepSleep.h"
 
-RTC_DATA_ATTR int state = 0;
+RTC_DATA_ATTR int state;
 unsigned long lastBlinkTime = 0;
 bool blinkState = false;
 
@@ -51,7 +51,7 @@ void SwitchState()
     case 5: // Go To Sleep Timed
         Serial.println("State 5: BOTH OFF");
         digitalWrite(LED_BUILTIN, LOW);
-        InitDeepSleepTime(5); // Sleep for 5 seconds
+        InitDeepSleepTime(); // Sleep for 5 seconds
         break;
 
     default: // Default
