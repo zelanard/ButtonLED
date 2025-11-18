@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include "DeepSleep.h"
 #include "driver/rtc_io.h"
+#include "Logger.h"
 
 void Init()
 {
@@ -23,9 +24,12 @@ void Init()
 
     Serial.begin(115200);
     delay(1000); // Wait for Serial to initialize
-    Serial.println("Initialization complete.");
+    Serial.println("Serial Initialization complete.");
+    Logger::SetUpLittleFS();
+
     Serial.println("State: " + String(state));
-    if(state == 1){
+    if (state == 1)
+    {
         DeepSleepButtonWakeUp();
     }
     SwitchState();
